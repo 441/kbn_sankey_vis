@@ -2,12 +2,10 @@
 // _array_to_linked_list should be imported from the removed directory 'ui/agg_response/hierarchical/_array_to_linked_list'
 const { arrayToLinkedList } = require('./_array_to_linked_list');
 const { aggregate } = require('./agg_response_helper');
-require('ui/notify');
 
-module.exports = function sankeyProvider(Private, createNotifier) {
-  let notify = new createNotifier({
-    location: 'Sankey chart response converter'
-  });
+import { toastNotifications } from 'ui/notify';
+
+module.exports = function sankeyProvider(Private) {
 
   return function (vis, resp) {
     let buckets = vis.aggs.bySchemaGroup.buckets;
@@ -33,13 +31,13 @@ module.exports = function sankeyProvider(Private, createNotifier) {
             slices: aggregate(aggData)
           };
         } else {
-          notify.error('Empty response.');
+          toastNotifications.addDanger('Empty response.');
           return {
             slices: { nodes: [], links: [] }
           };
         }
       } else {
-        notify.error('Minimum two sub aggs needed.');
+        toastNotifications.addDanger('Minimum two sub aggs needed.');
         return {
           slices: { nodes: [], links: [] }
         };
